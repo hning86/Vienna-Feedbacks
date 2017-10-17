@@ -1,0 +1,10 @@
+/Users/haining/Projects/ViennaFeedback/bin/Debug/netcoreapp2.0/ViennaFeedback.deps.json
+/Users/haining/Projects/ViennaFeedback/bin/Debug/netcoreapp2.0/ViennaFeedback.runtimeconfig.json
+/Users/haining/Projects/ViennaFeedback/bin/Debug/netcoreapp2.0/ViennaFeedback.runtimeconfig.dev.json
+/Users/haining/Projects/ViennaFeedback/bin/Debug/netcoreapp2.0/ViennaFeedback.dll
+/Users/haining/Projects/ViennaFeedback/bin/Debug/netcoreapp2.0/ViennaFeedback.pdb
+/Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.csproj.CoreCompileInputs.cache
+/Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.AssemblyInfoInputs.cache
+/Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.AssemblyInfo.cs
+/Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.dll
+/Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.pdb
