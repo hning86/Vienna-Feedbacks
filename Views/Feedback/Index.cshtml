@@ -1,5 +1,64 @@
+@model IEnumerable<ViennaFeedback.Models.Feedback>
+
 @{
-    ViewData["Title"] = "Feedback List";
+    ViewData["Title"] = "Feedback";
+    ViewData["sasKey"] = "?sv=2016-05-31&si=ro-2017&sr=c&sig=avXb%2BXZu2SCa7rJu9I5%2BST7mQiiAXxVaR3qnNtkEkeI%3D";
 }
-<h2>Azure Machine Learning User Feedback</h2>
-<p>Hello from our view template!</p> 
+
+<h2>Smiles & Frowns</h2>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    UTC Time
+                </th>
+                <th>
+                    User 
+                </th>
+                <th>
+                    Type 
+                </th>
+                <th>
+                    Message
+                </th>
+                <th>
+                    
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+             <td>
+                @Html.DisplayFor(modelItem => item.eventTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+            <td>
+                @if (item.feedbackType.Trim().ToLower() == "frown") {
+                    <img src="/images/frown.png" alt="frown"/>
+                } else
+                {
+                    <img src="/images/smile.jpg" alt="smile"/>
+                }
+            </td>
+            <td>
+                @Html.Raw(@item.message.Replace(Environment.NewLine, "<br/>"))
+            </td>
+            <td>
+                @if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
+                    string url = @item.screenshot.Trim() + ViewData["sasKey"];
+                    <a href="@url" target="_new"><img src="/images/screenshot.png" alt="screenshot" width="30px"></a>
+                } 
+            </td>
+            <td>                
+                @if (!String.IsNullOrEmpty(item.email.Trim())) {
+                    <a href="mailto:@item.email"><img src="/images/email.png" width="30px"></a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
