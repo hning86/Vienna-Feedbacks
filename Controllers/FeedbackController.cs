@@ -18,15 +18,48 @@ namespace ViennaFeedback.Controllers
             _context = context;
         }
 
+        // Find all weeks between launch date and now
+        private Dictionary<string, string> GetWeeks()
+        {
+            DateTime launchDate = new DateTime(2017, 9, 25);
+            DateTime dt = DateTime.Now;
+            DateTime startOfWeek = dt.Date.AddDays(-(int)dt.DayOfWeek);
+            DateTime endOfWeek = dt.Date.AddDays(7 - (int)dt.DayOfWeek).AddTicks(-1);
+            
+            Dictionary<string, string> weeks = new Dictionary<string, string>();
+            while (endOfWeek > launchDate) 
+            {                
+                weeks.Add(startOfWeek.ToString("yyyy-MM-dd"), startOfWeek.ToShortDateString());                
+                startOfWeek = startOfWeek.AddDays(-7);
+                endOfWeek = endOfWeek.AddDays(-7);
+            }
+            return weeks;
+        }
         // GET: Feedback
-        public async Task<IActionResult> Index(DateTime? dt) {
+        [ServiceFilter(typeof(ViennaFeedback.ClientIPCheckilter))]
+        public async Task<IActionResult> Index(DateTime? dt) 
+        {
             if (!dt.HasValue)
                 dt = DateTime.Now;
-            Console.WriteLine(dt);
+            DateTime startOfWeek = dt.Value.Date.AddDays(-(int)dt.Value.DayOfWeek);
+            DateTime endOfWeek = startOfWeek.AddDays(7).AddTicks(-1);
+            
+            //return RedirectToAction("Test");
+            Dictionary<string, string> weeks = GetWeeks();
+            ViewData["Weeks"] = weeks;
+            ViewData["CurrentWeek"] = startOfWeek.ToString("yyyy-MM-dd");
+            
             return View(await _context.Feedback
-                .Where(f => f.eventTime >= dt.Value.Date && f.eventTime < dt.Value.Date.AddDays(1).AddTicks(-1))
-                .OrderBy(f => f.eventTime)
-                .ToListAsync());
+                .Where(f => f.eventTime >= startOfWeek && f.eventTime < endOfWeek)
+                .OrderByDescending(f => f.eventTime)
+                .ToListAsync());    
+        }
+
+        public ActionResult Test(){
+            Dictionary<string, string> weeks = GetWeeks();
+            ViewData["Weeks"] = weeks;
+            ViewData["CurrentWeek"] = DateTime.Now.ToString("yyyy-MM-dd");
+            return View();
         }
 
         // GET: Feedback/Details/5

@@ -1,0 +1,49 @@
+@model IEnumerable<ViennaFeedback.Models.Feedback>
+
+@{
+    ViewData["Title"] = "Feedback";
+    ViewData["sasKey"] = "?sv=2016-05-31&si=ro-2017&sr=c&sig=avXb%2BXZu2SCa7rJu9I5%2BST7mQiiAXxVaR3qnNtkEkeI%3D";
+    Dictionary<string, string> weeks = ViewData["Weeks"] as Dictionary<string, string>;
+    string currentWeek = ViewData["CurrentWeek"] as string;
+}
+
+<h2>Smiles & Frowns - week of @currentWeek</h2>
+<hr>
+<table>
+    <tr>
+        <td valign="top" style="margin:10px">                    
+            @foreach (string key in weeks.Keys){
+            <div><a href="?dt=@key">@weeks[key]</a></div>
+            }
+        </td>
+        <td style="width:30px"></td>
+        <td valign="top">
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    UTC Time
+                </th>
+                <th>
+                    User 
+                </th>
+                <th>
+                    Type 
+                </th>
+                <th>
+                    Message
+                </th>
+                <th>
+                    
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+        </td>
+    </tr>
+</table>
+

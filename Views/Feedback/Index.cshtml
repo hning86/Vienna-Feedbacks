@@ -3,20 +3,31 @@
 @{
     ViewData["Title"] = "Feedback";
     ViewData["sasKey"] = "?sv=2016-05-31&si=ro-2017&sr=c&sig=avXb%2BXZu2SCa7rJu9I5%2BST7mQiiAXxVaR3qnNtkEkeI%3D";
+    Dictionary<string, string> weeks = ViewData["Weeks"] as Dictionary<string, string>;
+    string currentWeek = ViewData["CurrentWeek"] as string;
 }
 
-<h2>Smiles & Frowns</h2>
+<h2>Smiles & Frowns - week of @currentWeek</h2>
+<hr>
+<table>
+    <tr>
+        <td valign="top" style="margin:10px">                    
+            @foreach (string key in weeks.Keys){
+            <div><a href="?dt=@key">@weeks[key]</a></div>
+            }
+        </td>
+        <td style="width:30px"></td>
+        <td valign="top">
+
 <table class="table">
     <thead>
         <tr>
+                <th></th>
                 <th>
                     UTC Time
                 </th>
                 <th>
                     User 
-                </th>
-                <th>
-                    Type 
                 </th>
                 <th>
                     Message
@@ -30,22 +41,24 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-             <td>
+            <td>
+                @if (item.feedbackType.Trim().ToLower() == "frown") {
+                    <img src="/images/frown.png" alt="frownie"/>
+                } else
+                {
+                    <img src="/images/smile.jpg" alt="smiley"/>
+                }
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.eventTime)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.email)
             </td>
+            
             <td>
-                @if (item.feedbackType.Trim().ToLower() == "frown") {
-                    <img src="/images/frown.png" alt="frown"/>
-                } else
-                {
-                    <img src="/images/smile.jpg" alt="smile"/>
-                }
-            </td>
-            <td>
-                @Html.Raw(@item.message.Replace(Environment.NewLine, "<br/>"))
+                @Html.TextArea("message", @item.message, new {rows=8, cols=80})
+                <!-- @Html.Raw(@item.message.Replace(Environment.NewLine, "<br/>")) -->
             </td>
             <td>
                 @if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
@@ -55,10 +68,13 @@
             </td>
             <td>                
                 @if (!String.IsNullOrEmpty(item.email.Trim())) {
-                    <a href="mailto:@item.email"><img src="/images/email.png" width="30px"></a>
+                    <a href="mailto:@item.email?Subject=Re%3A%20Azure%20ML%20Workbench%20Feedback"><img src="/images/email.png" width="30px"></a>
                 }
             </td>
         </tr>
 }
     </tbody>
 </table>
+</td>
+</tr>
+</table>    
