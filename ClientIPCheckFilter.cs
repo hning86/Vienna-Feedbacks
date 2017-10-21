@@ -42,7 +42,7 @@ namespace ViennaFeedback
                 "157.58.0.0/15",
                 "157.60.0.0/16",
                 //"0.0.0.0/8", // localhost
-                //"::1", // localhosts
+                "::1", // localhosts
                 "73.4.97.83" // comcast
                 //"127.0.0.1" // localhost
             };

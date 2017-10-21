@@ -6,41 +6,72 @@
     Dictionary<string, string> weeks = ViewData["Weeks"] as Dictionary<string, string>;
     string currentWeek = ViewData["CurrentWeek"] as string;
 }
+<script src="/js/clipboardJS/clipboard.min.js"></script>
+
+<style>
+    .btn {
+    position: relative;
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #eee;
+    background-image: linear-gradient(#fcfcfc,#eee);
+    border: 1px solid #d5d5d5;
+    border-radius: 3px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-appearance: none;
+}
+</style>
+<script language="JavaScript">
+    new Clipboard('.btn');
+</script>
 
 <h2>Smiles & Frowns - week of @currentWeek</h2>
 <hr>
-<table>
-    <tr>
-        <td valign="top" style="margin:10px">                    
-            @foreach (string key in weeks.Keys){
-            <div><a href="?dt=@key">@weeks[key]</a></div>
-            }
-        </td>
-        <td style="width:30px"></td>
-        <td valign="top">
 
 <table class="table">
     <thead>
         <tr>
+                <th>Week of</th>
                 <th></th>
                 <th>
                     UTC Time
-                </th>
-                <th>
-                    User 
-                </th>
+                </th>                
                 <th>
                     Message
                 </th>
+                <th></th>
                 <th>
-                    
                 </th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
+@{int c = 0;}
 @foreach (var item in Model) {
+    c++;
         <tr>
+            @if (c == 1){
+            <td rowspan=@Model.Count()>
+                @foreach (string key in weeks.Keys) {
+                    if (key == currentWeek) {
+                        <b>@weeks[key]</b>
+                    } else {
+                    <div><a href="?dt=@key">@weeks[key]</a></div>
+                    }                 
+                }          
+            </td> 
+            }
             <td>
                 @if (item.feedbackType.Trim().ToLower() == "frown") {
                     <img src="/images/frown.png" alt="frownie"/>
@@ -53,12 +84,24 @@
                 @Html.DisplayFor(modelItem => item.eventTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.email)
+                @{ 
+                    string email = item.email.Trim(); 
+                    if (string.IsNullOrEmpty(email)) {
+                        email = "anonymous";
+                    }
+                }
+                @email:<br/>
+                @{ string taId = "id" + @item.eventTime.Ticks.ToString(); }
+                @Html.TextArea("message", @item.message.ToString().Trim(), new {@id=@taId, rows=8, cols=80})
             </td>
-            
             <td>
-                @Html.TextArea("message", @item.message, new {rows=8, cols=80})
-                <!-- @Html.Raw(@item.message.Replace(Environment.NewLine, "<br/>")) -->
+                <button class="btn" data-clipboard-target="#@taId">
+                    <img src="/images/clippy.svg" width="16px" alt="Copy to clipboard">
+                </button>
+            </td>
+            <td>
+                @{ string vstsUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Bug?[System.Tags]={0}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E", item.feedbackType.ToString().Trim()); }
+                <a href="@vstsUrl"><img src="/images/vsts.png" width="20px" alt="vsts"></a>
             </td>
             <td>
                 @if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
@@ -75,6 +118,3 @@
 }
     </tbody>
 </table>
-</td>
-</tr>
-</table>    
