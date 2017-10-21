@@ -101,7 +101,7 @@
             </td>
             <td>
                 @{ string vstsUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Bug?[System.Tags]={0}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E", item.feedbackType.ToString().Trim()); }
-                <a href="@vstsUrl"><img src="/images/vsts.png" width="20px" alt="vsts"></a>
+                <a href="@vstsUrl" target="_new"><img src="/images/vsts.png" width="20px" alt="vsts"></a>
             </td>
             <td>
                 @if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
