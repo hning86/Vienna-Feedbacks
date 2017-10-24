@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 using ViennaFeedback.Models;
 
@@ -15,10 +18,19 @@ namespace ViennaFeedback
 {
     public class Startup
     {
+
+         public Startup(IHostingEnvironment env)
+        {
+            // Set up configuration sources.
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("config.json")
+                .AddJsonFile("appsettings.json")
+                .Build();
+        }
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-            
+            configuration = new Configuration();   
         }
 
         public IConfiguration Configuration { get; }
@@ -30,6 +42,40 @@ namespace ViennaFeedback
             services.AddMvc();
             services.AddDbContext<MvcFeedbackContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ClientTelemetryDb")));
+
+            services.AddAuthentication(sharedOptions =>
+            {
+                sharedOptions.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                sharedOptions.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+                // Configure the OWIN pipeline to use cookie auth.
+                .AddCookie()
+                // Configure the OWIN pipeline to use OpenID Connect auth.
+                .AddOpenIdConnect(option =>
+                {
+                    option.ClientId = Configuration["AzureAD:ClientId"];
+                    option.Authority = String.Format(Configuration["AzureAd:AadInstance"], Configuration["AzureAd:Tenant"]);
+                    option.SignedOutRedirectUri = Configuration["AzureAd:PostLogoutRedirectUri"];
+                    option.Events = new OpenIdConnectEvents
+                    {
+                        OnRemoteFailure = OnAuthenticationFailed,
+                    };
+                });
+
+            // Add Authorization
+            services.AddAuthorization(
+                options => {
+                    //options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("http://schemas.microsoft.com/identity/claims/tenantid", "72f988bf-86f1-41af-91ab-2d7cd011db47"));
+                    options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("in_corp", "true"));
+                }
+            );
+        }
+
+        private Task OnAuthenticationFailed(RemoteFailureContext context)
+        {
+            context.HandleResponse();
+            context.Response.Redirect("/Home/Error?message=" + context.Failure.Message);
+            return Task.FromResult(0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

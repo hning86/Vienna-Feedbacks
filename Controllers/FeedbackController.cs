@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ViennaFeedback.Models;
@@ -35,6 +37,7 @@ namespace ViennaFeedback.Controllers
             }
             return weeks;
         }
+        [Authorize()]
         // GET: Feedback
         [ServiceFilter(typeof(ViennaFeedback.ClientIPCheckilter))]
         public async Task<IActionResult> Index(DateTime? dt) 
