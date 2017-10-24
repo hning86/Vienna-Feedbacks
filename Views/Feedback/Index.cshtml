@@ -9,30 +9,11 @@
 <script src="/js/clipboardJS/clipboard.min.js"></script>
 
 <style>
-    .btn {
-    position: relative;
-    display: inline-block;
-    padding: 6px 12px;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 20px;
-    color: #333;
-    white-space: nowrap;
-    vertical-align: middle;
-    cursor: pointer;
-    background-color: #eee;
-    background-image: linear-gradient(#fcfcfc,#eee);
-    border: 1px solid #d5d5d5;
-    border-radius: 3px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-appearance: none;
+.myLink {
 }
 </style>
 <script language="JavaScript">
-    new Clipboard('.btn');
+    new Clipboard('.myLink');
 </script>
 
 <h2>Smiles & Frowns - week of @currentWeek</h2>
@@ -40,7 +21,8 @@
 
 <table class="table">
     <thead>
-        <tr>
+        @if (Model.Count() > 0) {
+            <tr>
                 <th>Week of</th>
                 <th></th>
                 <th>
@@ -50,13 +32,25 @@
                     Message
                 </th>
                 <th></th>
-                <th>
-                </th>
-            <th></th>
-            <th></th>
-        </tr>
+            </tr>
+        }
     </thead>
     <tbody>
+
+
+@if (Model.Count() == 0) {
+    foreach (string key in weeks.Keys) {
+        if (key == currentWeek) 
+        {
+            <b>@weeks[key]</b>
+        } else 
+        {
+            <div><a href="?dt=@key">@weeks[key]</a></div>
+        }                 
+    }
+}
+
+
 @{int c = 0;}
 @foreach (var item in Model) {
     c++;
@@ -67,7 +61,7 @@
                     if (key == currentWeek) {
                         <b>@weeks[key]</b>
                     } else {
-                    <div><a href="?dt=@key">@weeks[key]</a></div>
+                        <div><a href="?dt=@key">@weeks[key]</a></div>
                     }                 
                 }          
             </td> 
@@ -95,24 +89,28 @@
                 @Html.TextArea("message", @item.message.ToString().Trim(), new {@id=@taId, rows=8, cols=80})
             </td>
             <td>
-                <button class="btn" data-clipboard-target="#@taId">
-                    <img src="/images/clippy.svg" width="16px" alt="Copy to clipboard">
-                </button>
-            </td>
-            <td>
-                @{ string vstsUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Bug?[System.Tags]={0}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E", item.feedbackType.ToString().Trim()); }
-                <a href="@vstsUrl" target="_new"><img src="/images/vsts.png" width="20px" alt="vsts"></a>
-            </td>
-            <td>
+                <div class="myLink" data-clipboard-target="#@taId">
+                    <a href="#">Copy to clipboard</a>
+                </div>
+                
+                <div>
+                    @{ string vstsUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Impediment?[System.Tags]={1}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E&[System.Description]={2}", item.feedbackType.Trim() + " - " + item.eventTime.ToString().Trim(), item.feedbackType.Trim(), System.Web.HttpUtility.UrlEncode(email + ":" + Environment.NewLine + item.message.Trim())); }
+                    <a href="@vstsUrl" target="_new">Create VSO impediment</a>
+                </div>
+
+                <div>
                 @if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
                     string url = @item.screenshot.Trim() + ViewData["sasKey"];
-                    <a href="@url" target="_new"><img src="/images/screenshot.png" alt="screenshot" width="30px"></a>
+                    <a href="@url" target="_new">Captured screenshot</a>
                 } 
-            </td>
-            <td>                
+                </div>
+
+                <div>
                 @if (!String.IsNullOrEmpty(item.email.Trim())) {
-                    <a href="mailto:@item.email?Subject=Re%3A%20Azure%20ML%20Workbench%20Feedback"><img src="/images/email.png" width="30px"></a>
+                    string emailUrl = string.Format("mailto:{0}?Subject=Re%3A%20Azure%20ML%20Workbench%20Feedback&body={1}", item.email.Trim(), System.Web.HttpUtility.HtmlEncode(item.message.Trim()));
+                    <a href="@emailUrl">Respond with Email</a>
                 }
+                </div>
             </td>
         </tr>
 }
