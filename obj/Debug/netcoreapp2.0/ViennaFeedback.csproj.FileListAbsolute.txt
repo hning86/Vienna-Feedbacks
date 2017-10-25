@@ -8,3 +8,13 @@
 /Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.AssemblyInfo.cs
 /Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.dll
 /Users/haining/Projects/ViennaFeedback/obj/Debug/netcoreapp2.0/ViennaFeedback.pdb
+/Users/ninghai/Projects/git/Vienna-Feedbacks/bin/Debug/netcoreapp2.0/ViennaFeedback.deps.json
+/Users/ninghai/Projects/git/Vienna-Feedbacks/bin/Debug/netcoreapp2.0/ViennaFeedback.runtimeconfig.json
+/Users/ninghai/Projects/git/Vienna-Feedbacks/bin/Debug/netcoreapp2.0/ViennaFeedback.runtimeconfig.dev.json
+/Users/ninghai/Projects/git/Vienna-Feedbacks/bin/Debug/netcoreapp2.0/ViennaFeedback.dll
+/Users/ninghai/Projects/git/Vienna-Feedbacks/bin/Debug/netcoreapp2.0/ViennaFeedback.pdb
+/Users/ninghai/Projects/git/Vienna-Feedbacks/obj/Debug/netcoreapp2.0/ViennaFeedback.csproj.CoreCompileInputs.cache
+/Users/ninghai/Projects/git/Vienna-Feedbacks/obj/Debug/netcoreapp2.0/ViennaFeedback.AssemblyInfoInputs.cache
+/Users/ninghai/Projects/git/Vienna-Feedbacks/obj/Debug/netcoreapp2.0/ViennaFeedback.AssemblyInfo.cs
+/Users/ninghai/Projects/git/Vienna-Feedbacks/obj/Debug/netcoreapp2.0/ViennaFeedback.dll
+/Users/ninghai/Projects/git/Vienna-Feedbacks/obj/Debug/netcoreapp2.0/ViennaFeedback.pdb

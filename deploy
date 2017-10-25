@@ -1,3 +1,4 @@
 docker build -t viennafeedback .
 docker tag viennafeedback dotnetapps.azurecr.io/viennafeedback
+# docker login dotnetapps.azurecr.io -u dotnetapps -p 6l6r+o3WqfM5BtxOVTzXTYMjf9fFzZWP
 docker push dotnetapps.azurecr.io/viennafeedback
