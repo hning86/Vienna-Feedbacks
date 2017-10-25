@@ -11,8 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-
+using Microsoft.Extensions.Logging;
 using ViennaFeedback.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ViennaFeedback
 {
@@ -28,18 +30,26 @@ namespace ViennaFeedback
                 .AddJsonFile("appsettings.json")
                 .Build();
         }
-        public Startup(IConfiguration configuration)
-        {
-            configuration = new Configuration();   
-        }
+        // public Startup(IConfiguration configuration)
+        // {
+        //     Configuration = configuration;
+        // }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ClientIPCheckilter>();
-            services.AddMvc();
+            //services.AddScoped<ClientIPCheckilter>();
+            services.AddMvc(config => {
+                var policy = new AuthorizationPolicyBuilder()
+                     .RequireAuthenticatedUser()
+                     .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+            //services.AddMvc();
+
             services.AddDbContext<MvcFeedbackContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ClientTelemetryDb")));
 
@@ -79,8 +89,12 @@ namespace ViennaFeedback
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseAuthentication();
+            // Add the console logger.
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -89,7 +103,7 @@ namespace ViennaFeedback
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            
             app.UseStaticFiles();
             //app.UseIdentity();
             

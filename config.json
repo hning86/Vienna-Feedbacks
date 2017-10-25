@@ -3,6 +3,6 @@
         "ClientId": "3111df97-c067-480b-8033-2138aa95a6c5",
         "Tenant": "microsoft.onmicrosoft.com",
         "AadInstance": "https://login.microsoftonline.com/{0}", // This is the public instance of Azure AD
-        "PostLogoutRedirectUri": "http://localhost:5000/"
+        "PostLogoutRedirectUri": "https://viennafeedback.azurewebsites.net/"
     }
 }

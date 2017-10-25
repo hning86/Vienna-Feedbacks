@@ -1,0 +1,3 @@
+
+az webapp create -g dotnetapprg -p dotnetappsvcplan -n viennafeedback -i nginx
+az webapp delete -g dotnetapprg -n viennafeedback

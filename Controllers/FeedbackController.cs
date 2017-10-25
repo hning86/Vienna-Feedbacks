@@ -37,9 +37,9 @@ namespace ViennaFeedback.Controllers
             }
             return weeks;
         }
-        [Authorize()]
+        [Authorize(Policy = "EmployeeOnly")]
         // GET: Feedback
-        [ServiceFilter(typeof(ViennaFeedback.ClientIPCheckilter))]
+        //[ServiceFilter(typeof(ViennaFeedback.ClientIPCheckilter))]
         public async Task<IActionResult> Index(DateTime? dt) 
         {
             if (!dt.HasValue)

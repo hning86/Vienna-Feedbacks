@@ -13110,8 +13110,22 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
       "Microsoft.AspNetCore.All >= 2.0.0",
+      "Microsoft.AspNetCore.Authentication.Cookies >= 2.0.0",
+      "Microsoft.AspNetCore.Authentication.OpenIdConnect >= 2.0.0",
+      "Microsoft.AspNetCore.Diagnostics >= 2.0.0",
+      "Microsoft.AspNetCore.Mvc >= 2.0.0",
+      "Microsoft.AspNetCore.Mvc.TagHelpers >= 2.0.0",
+      "Microsoft.AspNetCore.Server.IISIntegration >= 2.0.0",
+      "Microsoft.AspNetCore.Server.Kestrel >= 2.0.0",
+      "Microsoft.AspNetCore.StaticFiles >= 2.0.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 2.0.0",
+      "Microsoft.Extensions.Configuration.FileExtensions >= 2.0.0",
+      "Microsoft.Extensions.Configuration.Json >= 2.0.0",
+      "Microsoft.Extensions.Logging >= 2.0.0",
+      "Microsoft.Extensions.Logging.Console >= 2.0.0",
+      "Microsoft.Extensions.Logging.Debug >= 2.0.0",
       "Microsoft.NETCore.App >= 2.0.0",
+      "Microsoft.VisualStudio.Web.BrowserLink >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.0",
       "System.Data.SqlClient >= 4.4.0"
     ]
@@ -13173,6 +13187,62 @@
             "version": "2.0.0"
           },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Diagnostics": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Mvc": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Mvc.TagHelpers": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Server.IISIntegration": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.StaticFiles": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.Extensions.Configuration.FileExtensions": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.Extensions.Configuration.Json": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.Extensions.Logging": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.Extensions.Logging.Console": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.Extensions.Logging.Debug": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Authentication.Cookies": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Server.Kestrel": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
+            "target": "Package",
+            "version": "2.0.0"
+          },
+          "Microsoft.VisualStudio.Web.BrowserLink": {
             "target": "Package",
             "version": "2.0.0"
           }
