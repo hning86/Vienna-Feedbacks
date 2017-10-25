@@ -11,13 +11,16 @@
 <style>
 .myLink {
 }
+.icon {
+    width: 24px;
+    margin-bottom: 5px;
+}
 </style>
 <script language="JavaScript">
     new Clipboard('.myLink');
 </script>
 
 <h2>Smiles & Frowns - week of @currentWeek</h2>
-<hr>
 
 <table class="table">
     <thead>
@@ -28,7 +31,7 @@
                 <th>
                     UTC Time
                 </th>                
-                <th>
+                <th width="400px">
                     Message
                 </th>
                 <th>Actions</th>
@@ -68,58 +71,60 @@
             }
             <td>
                 @if (item.feedbackType.Trim().ToLower() == "frown") {
-                    <img src="/images/frown.png" alt="frownie"/>
+                    <img src="/images/frown.jpg" title="frownie"/>
                 } else
                 {
-                    <img src="/images/smile.jpg" alt="smiley"/>
+                    <img src="/images/smile.jpg" title="smiley"/>
                 }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.eventTime)
             </td>
-            <td>
+            <td width="400px">
                 @{ 
                     string email = item.email.Trim(); 
                     if (string.IsNullOrEmpty(email)) {
                         email = "anonymous";
                     }
                 }
-                @email:<br/>
-                @{ string taId = "id" + @item.eventTime.Ticks.ToString(); }
-                @Html.TextArea("message", @item.message.ToString().Trim(), new {@id=@taId, rows=8, cols=80, @readonly="readonly", style="background:#EEEEEE"})
+                
+                @{ 
+                    string taId = "id" + @item.eventTime.Ticks.ToString(); 
+                    string msg = email + " [" + @item.eventTime.ToString() + "]:" + Environment.NewLine + Environment.NewLine + @item.message.Trim();
+                }
+                @Html.TextArea("message", @msg, new {@id=@taId, rows=8, cols=80, @readonly="readonly", style="background:#EEEEEE"})
             </td>
             <td>
-                <div class="myLink" data-clipboard-target="#@taId">
-                    <a href="#">Copy to clipboard</a>
-                </div>
-                
-                <div>
+                <a class="myLink" data-clipboard-target="#@taId">
+                    <img src="images/icons/clipboard.png" class="icon" title="Copy to clipboard">
+                </a>                
+                <br/>
                 @if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
                     string screeshotUrl = @item.screenshot.Trim() + ViewData["sasKey"];
-                    <a href="@screeshotUrl" target="_new">See screenshot</a>
+                    <a href="@screeshotUrl" target="_new"><img src="images/icons/screenshot.png" class="icon" title="See screenshot"></a>
+                    <br/>
                 } 
-                </div>
+                
+                @{ 
+                    string impUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Impediment?[System.Tags]={1}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E&[Microsoft.VSTS.Build.FoundIn]={3}&[System.Description]={2}", item.feedbackType.Trim() + " - " + item.eventTime.ToString().Trim(), item.feedbackType.Trim(), System.Web.HttpUtility.UrlEncode(email + ":" + Environment.NewLine + item.message.Trim()), item.appVersion); 
+                    string bugUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Bug?[System.Tags]={1}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E&[Microsoft.VSTS.Build.FoundIn]={3}&[Microsoft.VSTS.TCM.ReproSteps]={2}",  item.feedbackType.Trim() + " - " + item.eventTime.ToString().Trim(), item.feedbackType.Trim(), System.Web.HttpUtility.UrlEncode(email + ":" + Environment.NewLine + item.message.Trim()), item.appVersion); 
 
-                <div>
-                    @{ 
-                        string impUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Impediment?[System.Tags]={1}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E&[Microsoft.VSTS.Build.FoundIn]={3}&[System.Description]={2}", item.feedbackType.Trim() + " - " + item.eventTime.ToString().Trim(), item.feedbackType.Trim(), System.Web.HttpUtility.UrlEncode(email + ":" + Environment.NewLine + item.message.Trim()), item.appVersion); 
-                        string bugUrl = string.Format("https://msdata.visualstudio.com/Vienna/_workitems/create/Bug?[System.Tags]={1}&[System.Title]=%5B{0}%5D%3A%20%3Ctitle%3E&[Microsoft.VSTS.Build.FoundIn]={3}&[Microsoft.VSTS.TCM.ReproSteps]={2}",  item.feedbackType.Trim() + " - " + item.eventTime.ToString().Trim(), item.feedbackType.Trim(), System.Web.HttpUtility.UrlEncode(email + ":" + Environment.NewLine + item.message.Trim()), item.appVersion); 
-
-                        if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
-                            string screeshotUrl = item.screenshot.Trim() + ViewData["sasKey"];
-                            impUrl += System.Web.HttpUtility.UrlEncode(Environment.NewLine + Environment.NewLine + screeshotUrl);
-                            bugUrl += System.Web.HttpUtility.UrlEncode(Environment.NewLine + Environment.NewLine + screeshotUrl);
-                        }
+                    if (!String.IsNullOrEmpty(item.screenshot.Trim())) {
+                        string screeshotUrl = item.screenshot.Trim() + ViewData["sasKey"];
+                        impUrl += System.Web.HttpUtility.UrlEncode(Environment.NewLine + Environment.NewLine + screeshotUrl);
+                        bugUrl += System.Web.HttpUtility.UrlEncode(Environment.NewLine + Environment.NewLine + screeshotUrl);
                     }
-                    Create <a href="@impUrl" target="_new"><b>an impediment</b></a> or <a href="@bugUrl" target="_new"><b>a bug</b></a>
-                </div>
-        
-                <div>
-                @if (!String.IsNullOrEmpty(item.email.Trim())) {
-                    string emailUrl = string.Format("mailto:{0}?Subject=Re%3A%20Azure%20ML%20Workbench%20Feedback&body={1}", item.email.Trim(), System.Web.HttpUtility.HtmlEncode(item.message.Trim()));
-                    <a href="@emailUrl">Respond with email</a>
                 }
-                </div>
+                <a href="@impUrl" target="_new"><img src="images/icons/impediment.png" class="icon" title="Create an impediment"></a> 
+                or 
+                <a href="@bugUrl" target="_new"><img src="images/icons/bug.png" class="icon" title="Create a bug"></a>
+                        
+                <br/>
+                @if (!String.IsNullOrEmpty(item.email.Trim())) {
+                    string emailBody = "%0A%0A=========%0AOriginal message:%0A" + email + ": [" + @item.eventTime.ToString() + "(UTC)]:%0A%0A" + @item.message.Trim();
+                    string emailUrl = string.Format("mailto:{0}?Subject=Re%3A%20Azure%20ML%20Workbench%20Feedback&body={1}", item.email.Trim(), emailBody); //System.Web.HttpUtility.HtmlEncode(emailBody));
+                    <a href="@emailUrl"><img src="images/icons/email.png" class="icon" title="Respond with email"></a>
+                }
             </td>
         </tr>
 }
