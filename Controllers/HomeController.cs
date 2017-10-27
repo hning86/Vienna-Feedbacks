@@ -17,6 +17,7 @@ namespace ViennaFeedback.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

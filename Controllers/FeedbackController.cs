@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ViennaFeedback.Models;
+using System.Diagnostics;
 
 namespace ViennaFeedback.Controllers
 {
@@ -37,11 +38,18 @@ namespace ViennaFeedback.Controllers
             }
             return weeks;
         }
+
         [Authorize(Policy = "EmployeeOnly")]
         // GET: Feedback
         //[ServiceFilter(typeof(ViennaFeedback.ClientIPCheckilter))]
         public async Task<IActionResult> Index(DateTime? dt) 
         {
+            if (!User.Identity.Name.ToLower().EndsWith("@microsoft.com")){
+                return View(new ErrorViewModel { 
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, 
+                    Message = string.Format("{0} is not authorized.", User.Identity.Name)
+                    });
+            }
             if (!dt.HasValue)
                 dt = DateTime.Now;
             DateTime startOfWeek = dt.Value.Date.AddDays(-(int)dt.Value.DayOfWeek);

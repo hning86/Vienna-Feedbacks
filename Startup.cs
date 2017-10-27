@@ -76,7 +76,7 @@ namespace ViennaFeedback
             services.AddAuthorization(
                 options => {
                     //options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("http://schemas.microsoft.com/identity/claims/tenantid", "72f988bf-86f1-41af-91ab-2d7cd011db47"));
-                    options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("in_corp", "true"));
+                    options.AddPolicy("EmployeeOnly", policy => policy.RequireClaim("http://schemas.microsoft.com/identity/claims/tenantid", "72f988bf-86f1-41af-91ab-2d7cd011db47"));
                 }
             );
         }

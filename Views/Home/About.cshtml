@@ -1,7 +1,21 @@
 ﻿@{
-    ViewData["Title"] = "About";
+    ViewData["Title"] = "Claims";
 }
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<p>Use this area to provide additional information.</p>
+<p>See a list of claims in your AAD token.</p>
+
+<table>
+    <thead>
+        <th>Claim Type</th>
+        <th>Claim Value</th>
+    </thead>
+
+@foreach (var c in User.Claims){
+    <tr>
+        <td>@c.Type</td>
+        <td>@c.Value</td>
+    </tr>
+}
+</table>
